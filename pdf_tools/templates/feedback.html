@@ -1,0 +1,116 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedback - Kannanware Innovation</title>
+    <link rel="icon" type="image/png" href="{% static 'imagespdf2.png' %}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #007bff;
+            padding: 10px 20px;
+            color: white;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 80vh;
+            text-align: center;
+        }
+        .feedback-form {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 50%;
+            max-width: 500px;
+        }
+        .feedback-form input, .feedback-form textarea, .feedback-form select {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .feedback-form button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .feedback-form button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <h2>Kannanware Innovation - Feedback</h2>
+    </div>
+    <div class="container">
+        <form class="feedback-form" onsubmit="submitFeedback(event)">
+            <h2>We Value Your Feedback</h2>
+            <label for="name">Your Name:</label>
+            <input type="text" id="name" name="name" placeholder="Enter your name" required>
+            
+            <label for="email">Your Email:</label>
+            <input type="email" id="email" name="email" placeholder="Enter your email" required>
+            
+            <label for="rating">Rate Our PDF Editor:</label>
+            <select id="rating" name="rating" required>
+                <option value="5">Excellent</option>
+                <option value="4">Very Good</option>
+                <option value="3">Good</option>
+                <option value="2">Fair</option>
+                <option value="1">Poor</option>
+            </select>
+            
+            <label for="comments">Your Feedback:</label>
+            <textarea id="comments" name="comments" rows="4" placeholder="Share your experience..." required></textarea>
+            
+            <label for="changes">Anything to change for the upcoming version?</label>
+            <textarea id="changes" name="changes" rows="3" placeholder="Suggest improvements..."></textarea>
+            
+            <label for="file">Attach Screenshot (Optional):</label>
+            <input type="file" id="file" name="file">
+            
+            <button type="submit">Submit Feedback</button>
+        </form>
+    </div>
+
+    <script>
+        function submitFeedback(event) {
+        event.preventDefault();
+        let formData = new FormData(document.querySelector(".feedback-form"));
+
+        fetch("{% url 'feedback' %}", {
+            method: "POST",
+            body: formData,
+            headers: {
+                "X-CSRFToken": "{{ csrf_token }}"
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert(data.message);
+            document.querySelector(".feedback-form").reset();
+        })
+        .catch(error => console.error("Error:", error));
+    }
+    </script>
+</body>
+</html>

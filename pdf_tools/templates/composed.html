@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compress PDF - Kannanware Innovation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #007bff;
+            padding: 10px 20px;
+            color: white;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 80vh;
+            text-align: center;
+        }
+        .upload-section {
+            margin-top: 20px;
+        }
+        .upload-section input {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .upload-section button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .upload-section button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <h1>Compress PDF</h1>
+    </div>
+    <div class="container">
+        <h2>Upload a PDF to Compress</h2>
+        <div class="upload-section">
+            <input type="file" id="fileUpload">
+            <button onclick="compressPDF()">Compress</button>
+        </div>
+        <p id="status"></p>
+    </div>
+    <script>
+        function compressPDF() {
+            const file = document.getElementById("fileUpload").files[0];
+            if (file) {
+                document.getElementById("status").innerText = "Compressing PDF...";
+            } else {
+                alert("Please select a PDF file.");
+            }
+        }
+    </script>
+</body>
+</html>

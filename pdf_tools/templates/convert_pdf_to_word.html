@@ -1,0 +1,126 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kannanware - PDF to Word</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            margin: auto;
+        }
+        .upload-section {
+            margin-top: 20px;
+        }
+        .upload-section input,
+        .upload-section button {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-top: 10px;
+            display: block;
+            width: 100%;
+        }
+        .upload-section button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .upload-section button:hover {
+            background-color: #0056b3;
+        }
+        .download-btn {
+            margin-top: 20px;
+            padding: 10px;
+            border: none;
+            background-color: #28a745;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+            display: none;
+            width: 100%;
+        }
+        .download-btn:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Convert PDF to Word</h2>
+        <p>Select a PDF file to convert it into a Word document.</p>
+
+        <div class="upload-section">
+            <input type="file" id="pdfUpload" accept="application/pdf">
+            <button id="convertButton" onclick="convertPDF()" disabled>Convert to Word</button>
+        </div>
+
+        <a id="downloadLink" class="download-btn">Download Word File</a>
+    </div>
+
+    <script>
+        document.getElementById("pdfUpload").addEventListener("change", function () {
+            document.getElementById("convertButton").disabled = !this.files.length;
+        });
+
+        function convertPDF() {
+    const pdf = document.getElementById("pdfUpload").files[0];
+
+    if (!pdf) {
+        alert("Please select a PDF file to convert.");
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append("pdf", pdf);
+
+    // Disable button and show loading text
+    const convertButton = document.getElementById("convertButton");
+    convertButton.disabled = true;
+    convertButton.textContent = "Converting...";
+
+    fetch("/convert-pdf-to-word", {
+        method: "POST",
+        body: formData
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.blob();
+    })
+    .then(blob => {
+        const url = URL.createObjectURL(blob);
+        const downloadLink = document.getElementById("downloadLink");
+        downloadLink.href = url;
+        downloadLink.download = "converted.docx";
+        downloadLink.style.display = "block";
+
+        // Reset button
+        convertButton.disabled = false;
+        convertButton.textContent = "Convert to Word";
+    })
+    .catch(error => {
+        console.error("Conversion Error:", error);
+        alert("Error: Unable to convert the file.");
+        convertButton.disabled = False;
+        convertButton.textContent = "Convert to Word";
+    });
+}
+
+    </script>
+</body>
+</html>

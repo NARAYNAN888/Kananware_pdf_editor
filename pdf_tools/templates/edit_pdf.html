@@ -1,0 +1,134 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit PDF Text - Kannanware Innovation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            text-align: center;
+        }
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #007bff;
+            padding: 10px 20px;
+            color: white;
+        }
+        .container {
+            max-width: 900px;
+            margin: 50px auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        canvas {
+            border: 1px solid #ccc;
+            margin-top: 20px;
+        }
+        input, button {
+            margin: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+    <script src="https://mozilla.github.io/pdf.js/build/pdf.js"></script>
+</head>
+<body>
+    <div class="navbar">
+        <h2>PDF Text Editor</h2>
+    </div>
+    <div class="container">
+        <h3>Upload and Edit PDF Text</h3>
+        <input type="file" id="pdfUpload" accept="application/pdf">
+        <button onclick="uploadPDF()">Upload PDF</button>
+        <canvas id="pdfViewer"></canvas>
+        <div>
+            <h3>Edit Text</h3>
+            <input type="text" id="searchText" placeholder="Find Text">
+            <input type="text" id="replaceText" placeholder="Replace With">
+            <button onclick="editPDF()">Apply Changes</button>
+        </div>
+    </div>
+
+    <script>
+        let pdfDoc = null;
+        let pageNum = 1;
+        let scale = 1.5;
+        let canvas = document.getElementById("pdfViewer");
+        let ctx = canvas.getContext("2d");
+
+        function uploadPDF() {
+            let fileInput = document.getElementById("pdfUpload").files[0];
+            let formData = new FormData();
+            formData.append("pdf", fileInput);
+
+            fetch("/upload", { method: "POST", body: formData })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        loadPDF(data.file_url);
+                    } else {
+                        alert("Error uploading PDF.");
+                    }
+                });
+        }
+
+        function loadPDF(url) {
+            let loadingTask = pdfjsLib.getDocument(url);
+            loadingTask.promise.then(pdf => {
+                pdfDoc = pdf;
+                renderPage(pageNum);
+            });
+        }
+
+        function renderPage(num) {
+            pdfDoc.getPage(num).then(page => {
+                let viewport = page.getViewport({ scale });
+                canvas.height = viewport.height;
+                canvas.width = viewport.width;
+
+                let renderContext = { canvasContext: ctx, viewport };
+                page.render(renderContext);
+            });
+        }
+
+        function editPDF() {
+            let searchText = document.getElementById("searchText").value;
+            let replaceText = document.getElementById("replaceText").value;
+
+            fetch("/edit", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ search_text: searchText, replace_text: replaceText })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert("Text replaced successfully!");
+                    loadPDF(data.file_url);
+                } else {
+                    alert("Error editing PDF.");
+                }
+            });
+        }
+    </script>
+</body>
+</html>

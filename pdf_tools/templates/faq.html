@@ -1,0 +1,222 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kannanware Innovation - FAQ</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #007bff;
+            padding: 10px 20px;
+            color: white;
+        }
+        .menu {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        .menu-item {
+            position: relative;
+        }
+        .menu-item a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 10px;
+        }
+        .submenu {
+            display: none;
+            position: absolute;
+            background-color: white;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            padding: 10px;
+            border-radius: 5px;
+            top: 100%;
+            left: 0;
+            white-space: nowrap;
+            flex-direction: column;
+            min-width: 150px;
+        }
+        .submenu a {
+            display: block;
+            color: black;
+            padding: 5px 10px;
+            text-decoration: none;
+        }
+        .submenu a:hover {
+            background-color: #ddd;
+        }
+        .menu-item:hover .submenu {
+            display: flex;
+        }
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #007bff;
+            text-align: center;
+        }
+        .faq-item {
+            margin-bottom: 15px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+        }
+        .faq-question {
+            font-weight: bold;
+            cursor: pointer;
+            color: #007bff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .faq-question:hover {
+            text-decoration: underline;
+        }
+        .faq-answer {
+            display: none;
+            padding-top: 5px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="menu">
+            <img src="{% static 'images/kannanware_logo_black_11zon.png'%}" alt="Kannanware Innovation Logo" height="40">
+            <div class="menu-item">
+                <a href="{% url 'home'%}">Home</a>
+            </div>
+            <div class="menu-item">
+                <a href="#">View</a>
+                <div class="submenu">
+                    <a href="{% url 'recent_files'%}">Recent Files</a>
+                    <a href="{% url 'shared_files'%}">Shared Files</a>
+                </div>
+            </div>
+            <div class="menu-item">
+                <a href="#">Edit</a>
+                <div class="submenu">
+                    <a href="{% url 'merge_pdf' %}">Merge PDF</a>
+                    <a href="{% url 'split'%}">Split PDF</a>
+                    <a href="{% url 'compress_pdf'%}">Compress PDF</a>
+                    <a href="{% url 'extract_text'%}">Extract Text</a>
+                    <a href="{% url 'rotate_pdf'%}">Rotate Pages</a>
+                    <a href="{% url 'remove_pages'%}">Remove Pages</a>
+                </div>
+            </div>
+            <div class="menu-item">
+                <a href="#">Help</a>
+                <div class="submenu">
+                    <a href="{% url 'faq'%}">FAQ</a>
+                    <a href="{% url 'support'%}">Support</a>
+                </div>
+            </div>
+            <div class="menu-item">
+                <a href="#">All PDF Editor</a>
+                <div class="submenu">
+                    <a href="{% url 'watermark_removal'%}">Watermark Removal</a>
+                    <a href="{% url 'add_annotations'%}">Add Annotations</a>
+                    <a href="{% url 'rearrange_pages'%}">Rearrange Pages</a>
+                    <a href="{% url 'sign_pdf'%}">Sign PDF</a>
+                    <a href="{% url 'convert_pdf_to_word'%}">Convert PDF to Word</a>
+                    <a href="{% url 'convert_word_to_pdf'%}">Convert Word to PDF</a>
+                    <a href="{% url 'convert_pdf_to_excel'%}">Convert PDF to Excel</a>
+                    <a href="{% url 'convert_pdf_to_image'%}">Convert PDF to Image</a>
+                    <a href="{% url 'ocr'%}">OCR (Extract Text from Image PDF)</a>
+                </div>
+            </div>
+<!--            <div class="menu-item">-->
+<!--                <a href="{% url 'faq'%}">FAQ</a>-->
+<!--            </div>-->
+        </div>
+    </div>
+
+    <div class="container">
+        <h1>Frequently Asked Questions (FAQ)</h1>
+
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFAQ(this)">
+                What is Kannanware Innovation? <span>+</span>
+            </div>
+            <div class="faq-answer">
+                Kannanware Innovations LLP is an Indian company specializing in SAP® Finance consulting, corporate training, and managed staffing solutions. Established in 2021 and based in Chennai, the company helps businesses with finance process consulting, re-engineering, and digital transformation. It also offers training programs to bridge skill gaps in the tech industry. With a focus on agility, transparency, and security, Kannanware aims to deliver innovative SAP® solutions that drive business growth and efficiency.
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFAQ(this)">
+                Is this tool free to use? <span>+</span>
+            </div>
+            <div class="faq-answer">
+                Yes, our basic PDF processing tools are free to use. However, some advanced features may require a premium subscription.
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFAQ(this)">
+                How can I merge multiple PDFs? <span>+</span>
+            </div>
+            <div class="faq-answer">
+                Go to the <b>Merge PDF</b> page, upload multiple PDFs, and click the "Merge PDFs" button. The system will combine them into a single file.
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFAQ(this)">
+                How do I extract text from scanned PDFs? <span>+</span>
+            </div>
+            <div class="faq-answer">
+                Use our <b>OCR (Extract Text from Image PDF)</b> tool. Upload your scanned PDF, and our system will extract the text using Optical Character Recognition.
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFAQ(this)">
+                How secure is my data? <span>+</span>
+            </div>
+            <div class="faq-answer">
+                Security is our top priority. Your files are processed locally and not stored or shared with anyone.
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFAQ(this)">
+                Can I use this tool on my mobile phone? <span>+</span>
+            </div>
+            <div class="faq-answer">
+                Yes! Our platform is mobile-friendly, and you can access all features on your smartphone or tablet.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleFAQ(element) {
+            const answer = element.nextElementSibling;
+            const isVisible = answer.style.display === "block";
+
+            document.querySelectorAll(".faq-answer").forEach(el => el.style.display = "none");
+            document.querySelectorAll(".faq-question span").forEach(el => el.textContent = "+");
+
+            if (!isVisible) {
+                answer.style.display = "block";
+                element.querySelector("span").textContent = "-";
+            }
+        }
+    </script>
+</body>
+</html>

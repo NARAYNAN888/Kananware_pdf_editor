@@ -1,0 +1,151 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kannanware Innovation - Support</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #007bff;
+            padding: 10px 20px;
+            color: white;
+        }
+        .menu {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        .menu-item a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 10px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        h1 {
+            color: #007bff;
+        }
+        .contact-info {
+            text-align: left;
+            margin-top: 20px;
+        }
+        .support-form {
+            margin-top: 30px;
+            text-align: left;
+        }
+        .support-form label {
+            font-weight: bold;
+            display: block;
+            margin-top: 10px;
+        }
+        .support-form input, .support-form textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .support-form button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="menu">
+            <img src="{% static 'images/kannanware_logo_black_11zon.png'%}" alt="Kannanware Innovation Logo" height="40">
+            <div class="menu-item"><a href="{% url 'home' %}">Home</a>
+                </div>
+            <div class="menu-item"><a href="{% url 'faq'%}">FAQ</a></div>
+            <div class="menu-item"><a href="{% url 'support'%}">Support</a></div>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1>Contact Support</h1>
+        <p>If you need help, have questions, or need technical support, feel free to reach out to us.</p>
+
+        <div class="contact-info">
+            <h2>Contact Information</h2>
+            <p><b>Email:</b> pex@kannanware.com</p>
+            <p><b>Phone:</b> +91 6383584223</p>
+            <p><b>Address:</b> Door No.3, plot .52,EB colony, 4th, 2nd Cross St, Adambakkam, Chennai, Tamil Nadu 600088</p>
+        </div>
+
+        <div class="support-form">
+            <h2>Send us a message</h2>
+            <form id="supportForm">
+                <label for="name">Your Name</label>
+                <input type="text" id="name" required>
+
+                <label for="email">Your Email</label>
+                <input type="email" id="email" required>
+
+                <label for="mobile">Your Mobile Number</label>
+                <input type="text" id="mobile" required>
+
+                <label for="message">Your Message</label>
+                <textarea id="message" rows="5" required></textarea>
+
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById("supportForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            const formData = {
+                name: document.getElementById("name").value,
+                email: document.getElementById("email").value,
+                mobile: document.getElementById("mobile").value,
+                message: document.getElementById("message").value
+            };
+
+            fetch("/submit-support/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": getCSRFToken()
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                document.getElementById("supportForm").reset();
+            })
+            .catch(error => console.error("Error:", error));
+        });
+
+        function getCSRFToken() {
+            return document.cookie.split("; ").find(row => row.startsWith("csrftoken="))?.split("=")[1];
+        }
+    </script>
+</body>
+</html>

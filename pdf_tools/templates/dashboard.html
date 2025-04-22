@@ -1,0 +1,146 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kannanware Innovation - Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+        .sidebar {
+            width: 250px;
+            background-color: #007bff;
+            color: white;
+            height: 100vh;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: center;
+        }
+        .logo {
+            width: 150px;
+            margin-bottom: 10px;
+        }
+        .sidebar h2 {
+            text-align: center;
+            margin: 10px 0;
+        }
+        .sidebar a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 10px;
+            display: block;
+            border-radius: 5px;
+            text-align: center;
+            width: 100%;
+        }
+        .sidebar a:hover {
+            background-color: #0056b3;
+        }
+        .main-content {
+            flex-grow: 1;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .header {
+            background-color: white;
+            padding: 15px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .dashboard-section {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            width: 250px;
+            text-align: center;
+        }
+        .card a {
+            text-decoration: none;
+            color: #007bff;
+            font-weight: bold;
+        }
+        .upload-area {
+            border: 2px dashed #007bff;
+            padding: 30px;
+            text-align: center;
+            background-color: white;
+            border-radius: 10px;
+        }
+        .recent-files {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <img src="{% static 'images/kannanware_logo_black_11zon.png' %}" alt="Company Logo" class="logo">
+        <h2>Dashboard</h2>
+        <a href="{% url 'home'%}">🏠 Home</a>
+        <a href="#">Upload PDF</a>
+        <a href="{% url 'edit_pdf'%}">Edit PDF</a>
+        <a href="#">Convert PDF</a>
+        <a href="{% url 'compress_pdf'%}">Compress PDF</a>
+        <a href="{% url 'sign_pdf'%}">Digital Signature</a>
+        <a href="{% url 'settings' %}">⚙️ Settings</a>
+    </div>
+    <div class="main-content">
+        <div class="header">
+            <h1>Welcome to Kannanware Innovation PDF Editor</h1>
+            <div class="user-profile">
+                <img src="{% static 'images/user.png' %}" alt="User Photo" width="40" height="40" style="border-radius: 50%;">
+                <span id="username">Admin</span>
+            </div>
+        </div>
+        <div class="upload-area">Drag & Drop PDFs here or <button>Select File</button></div>
+        <div class="recent-files">
+            <h2>Recent Files</h2>
+            <ul>
+                <li>File1.pdf - Edited 2 hours ago</li>
+                <li>File2.pdf - Edited 1 day ago</li>
+                <li>File3.pdf - Edited 3 days ago</li>
+            </ul>
+        </div>
+        <div class="dashboard-section">
+            <div class="card"><a href="{% url 'merge_pdf'%}">Merge PDFs</a></div>
+            <div class="card"><a href="{% url 'split'%}">Split PDFs</a></div>
+            <div class="card"><a href="{% url 'compress_pdf'%}">Compress PDFs</a></div>
+            <div class="card"><a href="{% url 'extract_text'%}">Extract Text</a></div>
+            <div class="card"><a href="{% url 'rotate_pdf'%}">Rotate Pages</a></div>
+            <div class="card"><a href="{% url 'convert_pdf_to_word'%}">Convert to Word</a></div>
+            <div class="card"><a href="{% url 'convert_pdf_to_excel'%}">Convert to Excel</a></div>
+            <div class="card"><a href="{% url 'convert_pdf_to_image'%}">Convert to Image</a></div>
+            <div class="card"><a href="{% url 'ocr'%}">OCR (Extract Text)</a></div>
+            <div class="card"><a href="{% url 'convert_word_to_pdf'%}">Convert Word to pdf</a></div>
+        </div>
+    </div>
+</body>
+</html>

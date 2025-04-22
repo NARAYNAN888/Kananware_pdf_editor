@@ -1,0 +1,192 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kannanware Innovation - Home</title>
+    <link rel="icon" type="image/png" href="{% static 'images/pdf2.ico' %}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #007bff;
+            padding: 10px 20px;
+            color: white;
+        }
+        .navbar .menu {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        .navbar .menu img {
+            height: 40px;
+            margin-right: 20px;
+        }
+        .menu-item {
+            position: relative;
+        }
+        .menu-item a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 10px;
+        }
+        .submenu {
+            display: none;
+            position: absolute;
+            background-color: white;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            padding: 10px;
+            border-radius: 5px;
+            top: 100%;
+            left: 0;
+            white-space: nowrap;
+            flex-direction: column;
+            min-width: 150px;
+        }
+        .submenu a {
+            display: block;
+            color: black;
+            padding: 5px 10px;
+            text-decoration: none;
+        }
+        .submenu a:hover {
+            background-color: #ddd;
+        }
+        .menu-item:hover .submenu {
+            display: flex;
+        }
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .user-profile img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 80vh;
+            text-align: center;
+        }
+        .upload-section {
+            margin-top: 20px;
+        }
+        .upload-section input {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .upload-section button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .upload-section button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const username = "admin"; // Retrieved from login session
+            document.getElementById("username").textContent = username;
+        });
+    </script>
+</head>
+<body>
+    <div class="navbar">
+        <div class="menu">
+            <img src="{% static 'images\kannanware_logo_black_11zon.png'  %}" alt="Kannanware Innovation Logo">
+            <div class="menu-item">
+                <a href="{% url 'home' %}"> 🏠 Home</a>
+                <div class="submenu">
+                    <a href="{% url 'dashboard' %}">📂 Dashboard</a>
+                    <a href="{% url 'settings' %}">⚙️ Settings</a>
+                </div>
+            </div>
+            <div class="menu-item">
+                <a href="#">🔎 View</a>
+                <div class="submenu">
+                    <a href="{% url 'recent_files'%}">📁  Recent Files</a>
+                    <a href="{% url 'shared_files'%}">🗃  Shared Files</a>
+                </div>
+            </div>
+            <div class="menu-item">
+                <a href="#">✏️ Edit</a>
+                <div class="submenu">
+                    <a href="{% url 'merge_pdf' %}">🔀 Merge PDF</a>
+                    <a href="{% url 'split'%}">Split PDF</a>
+                    <a href="{% url 'compress_pdf'%}">Compress PDF</a>
+                    <a href="{% url 'extract_text'%}">Extract Text</a>
+                    <a href="{% url 'rotate_pdf'%}">Rotate Pages</a>
+                    <a href="{% url 'remove_pages'%}">Remove Pages</a>
+                </div>
+            </div>
+            <div class="menu-item">
+                <a href="#">💡 Help</a>
+                <div class="submenu">
+                    <a href="{% url 'faq'%}">💬 FAQ</a>
+                    <a href="{% url 'support'%}">📩  Support</a>
+                </div>
+            </div>
+            <div class="menu-item">
+                <a href="#">🛠️  All PDF Editor</a>
+                <div class="submenu">
+                <a href="{% url 'watermark_removal'%}">Watermark Removal</a>
+                    <a href="{% url 'add_annotations'%}">Add Annotations</a>
+                    <a href="{% url 'rearrange_pages'%}">Rearrange Pages</a>
+                    <a href="{% url 'sign_pdf'%}">Sign PDF</a>
+                    <a href="{% url 'convert_pdf_to_word'%}">Convert PDF to Word</a>
+                    <a href="{% url 'convert_word_to_pdf'%}">Convert Word to PDF</a>
+                    <a href="{% url 'convert_pdf_to_excel'%}">Convert PDF to Excel</a>
+                    <a href="{% url 'convert_pdf_to_image'%}">Convert PDF to Image</a>
+                    <a href="{% url 'ocr'%}">OCR (Extract Text from Image PDF)</a>
+                </div>
+            </div>
+        </div>
+        {% load static %}  <!-- Load static at the top of the template -->
+
+        <div class="user-profile">
+        <img src="{% static 'images/user.png' %}" alt="User Logo">
+        <span id="username">Admin</span>
+        </div>
+
+    </div>
+    <div class="container">
+<!--        <img src="{% static 'images\kannanware_logo_black_11zon.png'  %}" >-->
+        <h1><marquee>Welcome to Kannanware Innovation</marquee></h1>
+        <p>Hello, <strong id="username"></strong>! You have successfully logged in.</p>
+<!--        <img src="{% static 'images/pdf.ico'  %}">-->
+<!--        <div class="upload-section">-->
+<!--            <input type="file" id="fileUpload">-->
+<!--            <button onclick="uploadFile()">Upload</button>-->
+<!--        </div>-->
+    </div>
+    <script>
+        function uploadFile() {
+            const fileInput = document.getElementById("fileUpload");
+            if (fileInput.files.length > 0) {
+                alert("File " + fileInput.files[0].name + " uploaded successfully.");
+            } else {
+                alert("Please select a file to upload.");
+            }
+        }
+    </script>
+</body>
+</html>

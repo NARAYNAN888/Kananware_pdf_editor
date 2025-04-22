@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kannanware PDF Editor</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #007bff;
+            padding: 10px 20px;
+            color: white;
+        }
+        .tabs {
+            display: flex;
+            justify-content: center;
+            background-color: #ddd;
+            padding: 10px;
+        }
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            background: #ccc;
+            margin: 0 5px;
+            border-radius: 5px;
+        }
+        .tab.active {
+            background: #007bff;
+            color: white;
+        }
+        .tab-content {
+            display: none;
+            padding: 20px;
+            background: white;
+            margin: 10px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+    <script>
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            document.querySelector(`[data-tab='${tabId}']`).classList.add('active');
+        }
+    </script>
+</head>
+<body>
+    <div class="navbar">
+        <h1>Kannanware PDF Editor</h1>
+    </div>
+    <div class="tabs">
+        <div class="tab active" data-tab="merge" onclick="showTab('merge')">Merge PDF</div>
+        <div class="tab" data-tab="split" onclick="showTab('split')">Split PDF</div>
+        <div class="tab" data-tab="compress" onclick="showTab('compress')">Compress PDF</div>
+        <div class="tab" data-tab="ocr" onclick="showTab('ocr')">OCR</div>
+    </div>
+    <div class="tab-content active" id="merge">
+        <h2>Merge PDF</h2>
+        <p>Select PDF files to merge.</p>
+        <input type="file" multiple>
+        <button>Merge</button>
+    </div>
+    <div class="tab-content" id="split">
+        <h2>Split PDF</h2>
+        <p>Select a PDF file to split.</p>
+        <input type="file">
+        <button>Split</button>
+    </div>
+    <div class="tab-content" id="compress">
+        <h2>Compress PDF</h2>
+        <p>Select a PDF file to compress.</p>
+        <input type="file">
+        <button>Compress</button>
+    </div>
+    <div class="tab-content" id="ocr">
+        <h2>OCR (Extract Text from PDF)</h2>
+        <p>Select an image-based PDF file for text extraction.</p>
+        <input type="file">
+        <button>Extract Text</button>
+    </div>
+</body>
+</html>

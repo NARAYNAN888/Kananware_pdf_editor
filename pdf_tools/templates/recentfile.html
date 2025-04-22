@@ -1,0 +1,195 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recent Files</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #007bff;
+            padding: 10px 20px;
+            color: white;
+        }
+        .navbar img {
+            height: 40px;
+            margin-right: 15px;
+        }
+        .menu {
+            display: flex;
+            gap: 20px;
+        }
+        .menu-item {
+            position: relative;
+            display: inline-block;
+        }
+        .menu-item a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+            display: block;
+        }
+        .submenu {
+            display: none;
+            position: absolute;
+            background-color: white;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+            min-width: 180px;
+            text-align: left;
+            z-index: 10;
+        }
+        .submenu a {
+            display: block;
+            padding: 10px;
+            color: black;
+        }
+        .menu-item:hover .submenu {
+            display: block;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            justify-content: space-between;
+        }
+        a {
+            text-decoration: none;
+            color: #007bff;
+        }
+        .clear-btn {
+            background: red;
+            color: white;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .user-profile {
+            display: flex;
+            align-items: center;
+        }
+        .user-profile img {
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        .user-profile span {
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="menu">
+            <img src="{% static 'images/kannanware_logo_black_11zon.png' %}" alt="Kannanware Innovation Logo">
+
+            <div class="menu-item">
+                <a href="{% url 'home' %}">Home</a>
+                <div class="submenu">
+                    <a href="{% url 'dashboard' %}">Dashboard</a>
+                    <a href="{% url 'settings' %}">Settings</a>
+                </div>
+            </div>
+
+            <div class="menu-item">
+                <a href="#">View</a>
+                <div class="submenu">
+                    <a href="{% url 'recent_files'%}">Recent Files</a>
+                    <a href="{% url 'shared_files'%}">Shared Files</a>
+                </div>
+            </div>
+            <div class="menu-item">
+                <a href="#">Edit</a>
+                <div class="submenu">
+                    <a href="{% url 'merge_pdf' %}">Merge PDF</a>
+                    <a href="{% url 'split'%}">Split PDF</a>
+                    <a href="{% url 'compress_pdf'%}">Compress PDF</a>
+                    <a href="{% url 'extract_text'%}">Extract Text</a>
+                    <a href="{% url 'rotate_pdf'%}">Rotate Pages</a>
+                    <a href="{% url 'remove_pages'%}">Remove Pages</a>
+                </div>
+            </div>
+            <div class="menu-item">
+                <a href="#">Help</a>
+                <div class="submenu">
+                    <a href="{% url 'faq'%}">FAQ</a>
+                    <a href="{% url 'support'%}">Support</a>
+                </div>
+            </div>
+            <div class="menu-item">
+                <a href="#">All PDF Editor</a>
+                <div class="submenu">
+                    <a href="{% url 'watermark_removal'%}">Watermark Removal</a>
+                    <a href="{% url 'add_annotations'%}">Add Annotations</a>
+                    <a href="{% url 'rearrange_pages'%}">Rearrange Pages</a>
+                    <a href="{% url 'sign_pdf'%}">Sign PDF</a>
+                    <a href="{% url 'convert_pdf_to_word'%}">Convert PDF to Word</a>
+                    <a href="{% url 'convert_word_to_pdf'%}">Convert Word to PDF</a>
+                    <a href="{% url 'convert_pdf_to_excel'%}">Convert PDF to Excel</a>
+                    <a href="{% url 'convert_pdf_to_image'%}">Convert PDF to Image</a>
+                    <a href="{% url 'ocr'%}">OCR (Extract Text from Image PDF)</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="user-profile">
+            <img src="{% static 'images/user.png' %}" alt="User Logo">
+            <span id="username">Admin</span>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Recent Files</h2>
+        <ul id="recentFiles"></ul>
+        <button class="clear-btn" onclick="clearRecentFiles()">Clear Recent Files</button>
+    </div>
+    <script>
+        function loadRecentFiles() {
+            let recentFiles = JSON.parse(localStorage.getItem("recentFiles")) || [];
+            let list = document.getElementById("recentFiles");
+            list.innerHTML = "";
+            recentFiles.forEach(file => {
+                let li = document.createElement("li");
+                li.innerHTML = `<a href="${file.url}" target="_blank">${file.name}</a>`;
+                list.appendChild(li);
+            });
+        }
+        function addRecentFile(name, url) {
+            let recentFiles = JSON.parse(localStorage.getItem("recentFiles")) || [];
+            recentFiles.unshift({ name, url });
+            if (recentFiles.length > 10) recentFiles.pop();
+            localStorage.setItem("recentFiles", JSON.stringify(recentFiles));
+            loadRecentFiles();
+        }
+        function clearRecentFiles() {
+            localStorage.removeItem("recentFiles");
+            loadRecentFiles();
+        }
+        window.onload = loadRecentFiles;
+    </script>
+</body>
+</html>

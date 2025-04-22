@@ -1,0 +1,223 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kannanware Innovation - Home</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #007bff;
+            padding: 10px 20px;
+            color: white;
+        }
+        .menu {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        .menu img {
+            height: 40px;
+            margin-right: 20px;
+        }
+        .menu-item {
+            position: relative;
+        }
+        .menu-item a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 10px;
+        }
+        .submenu {
+            display: none;
+            position: absolute;
+            background-color: white;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            padding: 10px;
+            border-radius: 5px;
+            top: 100%;
+            left: 0;
+            white-space: nowrap;
+            flex-direction: column;
+            min-width: 200px;
+            z-index: 100;
+        }
+        .submenu a {
+            display: block;
+            color: black;
+            padding: 8px 12px;
+            text-decoration: none;
+        }
+        .submenu a:hover {
+            background-color: #ddd;
+        }
+        .menu-item:hover .submenu {
+            display: flex;
+        }
+
+        /* User Profile Dropdown */
+        .user-profile {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            margin-left: auto;
+        }
+        .user-profile img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+        .profile-dropdown {
+            display: none;
+            position: absolute;
+            right: 0;
+            background-color: white;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            top: 50px;
+            min-width: 150px;
+            flex-direction: column;
+            z-index: 100;
+        }
+        .profile-dropdown a {
+            padding: 10px;
+            display: block;
+            color: black;
+            text-decoration: none;
+        }
+        .profile-dropdown a:hover {
+            background-color: #ddd;
+        }
+        .user-profile:hover .profile-dropdown {
+            display: flex;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 80vh;
+            text-align: center;
+        }
+        .upload-section {
+            margin-top: 20px;
+        }
+        .upload-section input {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .upload-section button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .upload-section button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const username = "admin"; // Simulating retrieved username from login session
+            document.querySelectorAll(".username").forEach(el => el.textContent = username);
+        });
+
+        function logout() {
+            alert("Logging out...");
+            window.location.href = "logout.html"; // Redirects to logout page
+        }
+
+        function uploadFile() {
+            const fileInput = document.getElementById("fileUpload");
+            if (fileInput.files.length > 0) {
+                const file = fileInput.files[0];
+                if (!file.name.toLowerCase().endsWith(".pdf")) {
+                    alert("Please upload a valid PDF file.");
+                    return;
+                }
+                alert("File " + file.name + " uploaded successfully.");
+            } else {
+                alert("Please select a file to upload.");
+            }
+        }
+    </script>
+</head>
+<body>
+
+    <div class="navbar">
+        <div class="menu">
+            <img src="{% static 'images\kannanware_logo_black_11zon.png' %}" alt="Kannanware Innovation Logo">
+            <div class="menu-item">
+                <a href="#">Home</a>
+                <div class="submenu">
+                    <a href="dashboard.html">Dashboard</a>
+                    <a href="settings.html">Settings</a>
+                </div>
+            </div>
+            <div class="menu-item">
+                <a href="#">View</a>
+                <div class="submenu">
+                    <a href="#">Recent Files</a>
+                    <a href="#">Shared Files</a>
+                </div>
+            </div>
+            <div class="menu-item">
+                <a href="#">Edit</a>
+                <div class="submenu">
+                    <a href="merge.html">Merge PDF</a>
+                    <a href="split.html">Split PDF</a>
+                    <a href="compress.html">Compress PDF</a>
+                    <a href="extract-text.html">Extract Text</a>
+                    <a href="rotate.html">Rotate Pages</a>
+                    <a href="watermark-removal.html">Watermark Removal</a>
+                    <a href="add-annotations.html">Add Annotations</a>
+                    <a href="remove-pages.html">Remove Pages</a>
+                    <a href="rearrange-pages.html">Rearrange Pages</a>
+                    <a href="sign-pdf.html">Sign PDF</a>
+                    <a href="convert-word.html">Convert PDF to Word</a>
+                    <a href="convert-excel.html">Convert PDF to Excel</a>
+                    <a href="convert-image.html">Convert PDF to Image</a>
+                    <a href="ocr.html">OCR (Extract Text from Image PDF)</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- User Profile with Dropdown -->
+        <div class="user-profile">
+            <img src="{% static 'user.png' %}" alt="User Photo">
+            <span class="username">Admin</span>
+            <div class="profile-dropdown">
+                <a href="profile.html">User Profile</a>
+                <a href="settings.html">Settings</a>
+                <a href="#" onclick="logout()">Logout</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1>Welcome to Kannanware Innovation</h1>
+        <p>Hello, <strong class="username"></strong>! You have successfully logged in.</p>
+        <div class="upload-section">
+            <input type="file" id="fileUpload">
+            <button onclick="uploadFile()">Upload</button>
+        </div>
+    </div>
+
+</body>
+</html>

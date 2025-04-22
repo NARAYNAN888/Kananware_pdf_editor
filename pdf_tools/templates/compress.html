@@ -1,0 +1,237 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kannanware Innovation - Compress PDF</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #007bff;
+            padding: 10px 20px;
+            color: white;
+        }
+        .menu {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        .menu-item {
+            position: relative;
+        }
+        .menu-item a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 10px;
+        }
+        .submenu {
+            display: none;
+            position: absolute;
+            background-color: white;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            padding: 10px;
+            border-radius: 5px;
+            top: 100%;
+            left: 0;
+            white-space: nowrap;
+            flex-direction: column;
+            min-width: 150px;
+        }
+        .submenu a {
+            display: block;
+            color: black;
+            padding: 5px 10px;
+            text-decoration: none;
+        }
+        .submenu a:hover {
+            background-color: #ddd;
+        }
+        .menu-item:hover .submenu {
+            display: flex;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 80vh;
+            text-align: center;
+        }
+        .upload-section {
+            margin-top: 20px;
+        }
+        .upload-section input,
+        .upload-section select,
+        .upload-section button {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .upload-section button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .upload-section button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        .upload-section button:hover {
+            background-color: #0056b3;
+        }
+        .info-section {
+            margin-top: 30px;
+            width: 60%;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            text-align: left;
+        }
+        .info-section h2 {
+            color: #007bff;
+        }
+        .info-section p {
+            color: #333;
+        }
+        .file-list {
+            margin-top: 15px;
+            text-align: left;
+            max-width: 300px;
+        }
+        .file-list ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .file-list li {
+            background: #fff;
+            margin: 5px 0;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+            font-size: 14px;
+        }
+        .loading {
+            display: none;
+            margin-top: 10px;
+            font-size: 16px;
+            color: #007bff;
+        }
+        .message {
+            margin-top: 10px;
+            font-size: 16px;
+            color: green;
+            display: none;
+        }
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="menu">
+            <img src="{% static 'images/kannanware_logo_black_11zon.png' %}" alt="Kannanware Innovation Logo" height="40">
+            <div class="menu-item">
+                <a href="{% url 'home'%}">Home</a>
+            </div>
+            <div class="menu-item">
+                <a href="#">View</a>
+                <div class="submenu">
+                    <a href="{% url 'recent_files'%}">Recent Files</a>
+                    <a href="{% url 'shared_files'%}">Shared Files</a>
+                </div>
+            </div>
+            <div class="menu-item">
+                <a href="#">Edit</a>
+                <div class="submenu">
+                    <a href="{% url 'merge_pdf' %}">Merge PDF</a>
+                    <a href="{% url 'split'%}">Split PDF</a>
+                    <a href="{% url 'compress_pdf'%}">Compress PDF</a>
+                    <a href="{% url 'extract_text'%}">Extract Text</a>
+                    <a href="{% url 'rotate_pdf'%}">Rotate Pages</a>
+                    <a href="{% url 'remove_pages'%}">Remove Pages</a>
+                </div>
+            </div>
+            <div class="menu-item">
+                <a href="#">Help</a>
+                <div class="submenu">
+                    <a href="{% url 'faq'%}">FAQ</a>
+                    <a href="{% url 'support'%}">Support</a>
+                </div>
+            </div>
+            <div class="menu-item">
+                <a href="#">All PDF Editor</a>
+                <div class="submenu">
+                    <a href="{% url 'watermark_removal'%}">Watermark Removal</a>
+                    <a href="{% url 'add_annotations'%}">Add Annotations</a>
+                    <a href="{% url 'rearrange_pages'%}">Rearrange Pages</a>
+                    <a href="{% url 'sign_pdf'%}">Sign PDF</a>
+                    <a href="{% url 'convert_pdf_to_word'%}">Convert PDF to Word</a>
+                    <a href="{% url 'convert_word_to_pdf'%}">Convert Word to PDF</a>
+                    <a href="{% url 'convert_pdf_to_excel'%}">Convert PDF to Excel</a>
+                    <a href="{% url 'convert_pdf_to_image'%}">Convert PDF to Image</a>
+                    <a href="{% url 'ocr'%}">OCR (Extract Text from Image PDF)</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <h1>Compress PDF File</h1>
+        <p>Select a PDF file and choose the compression level.</p>
+        <div class="upload-section">
+            <input type="file" id="fileUpload" accept="application/pdf">
+            <select id="compressionLevel">
+                <option value="low">Low Compression (Best Quality)</option>
+                <option value="medium">Medium Compression</option>
+                <option value="high">High Compression (Smallest Size)</option>
+            </select>
+            <button id="compressButton" onclick="compressPDF()" disabled>Compress PDF</button>
+        </div>
+        <div class="loading" id="loading">Compressing... Please wait.</div>
+        <div class="message" id="message"></div>
+        <div class="file-list" id="fileList"></div>
+        <div class="info-section">
+            <h2>How to Compress a PDF?</h2>
+            <p>1. Click "Choose File" and select a PDF.</p>
+            <p>2. Choose the compression level (Low, Medium, High).</p>
+            <p>3. Click "Compress PDF" to process the file.</p>
+            <p>4. Download the compressed PDF once the process is completed.</p>
+        </div>
+    </div>
+    <script>
+        document.getElementById("fileUpload").addEventListener("change", function () {
+            const file = this.files[0];
+            const compressButton = document.getElementById("compressButton");
+
+            if (file && file.type === "application/pdf") {
+                document.getElementById("fileList").innerHTML = `<ul><li>${file.name}</li></ul>`;
+                compressButton.disabled = false;
+            } else {
+                document.getElementById("fileList").innerHTML = "";
+                compressButton.disabled = true;
+            }
+        });
+
+        function compressPDF() {
+            document.getElementById("loading").style.display = "block";
+            setTimeout(() => {
+                document.getElementById("loading").style.display = "none";
+                document.getElementById("message").textContent = "PDF compressed successfully!";
+                document.getElementById("message").style.display = "block";
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,144 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kannanware Innovation - Convert Word to PDF</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #007bff;
+            padding: 10px 20px;
+            color: white;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 80vh;
+            text-align: center;
+        }
+        .upload-section {
+            margin-top: 20px;
+        }
+        .upload-section input,
+        .upload-section button {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+        .upload-section button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .upload-section button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        .download-btn {
+            margin-top: 20px;
+            padding: 10px;
+            border: none;
+            background-color: #28a745;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+            display: none;
+        }
+        .download-btn:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="menu-item">
+                <a href="{% url 'home' %}">Home</a>
+
+            </div>
+    </div>
+    <div class="container">
+        <h1>Convert Word to PDF</h1>
+        <p>Select a Word file to convert it into a PDF document.</p>
+        <div class="upload-section">
+            <input type="file" id="wordUpload" accept=".docx">
+            <button id="convertButton" onclick="convertWordToPDF()" disabled>Convert to PDF</button>
+        </div>
+        <p id="loadingText" style="display:none; color: #007bff;">Converting...</p>
+        <a id="downloadLink" class="download-btn">Download PDF File</a>
+    </div>
+
+    <script>
+        // Enable convert button when a file is selected
+        document.getElementById("wordUpload").addEventListener("change", function () {
+            document.getElementById("convertButton").disabled = !this.files.length;
+        });
+
+        // Function to get CSRF token from Django cookies
+        function getCSRFToken() {
+            return document.cookie.split('; ')
+                .find(row => row.startsWith('csrftoken='))
+                ?.split('=')[1];
+        }
+
+        // Function to handle Word to PDF conversion
+        function convertWordToPDF() {
+            const wordFile = document.getElementById("wordUpload").files[0];
+
+            if (!wordFile) {
+                alert("Please select a Word file to convert.");
+                return;
+            }
+            if (!wordFile.name.endsWith(".docx")) {
+                alert("Only .docx files are allowed.");
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append("word_file", wordFile);
+
+            document.getElementById("loadingText").style.display = "block";
+
+            fetch("{% url 'convert_word_to_pdf' %}", {
+                method: "POST",
+                headers: {
+                    "X-CSRFToken": getCSRFToken() // CSRF token for Django
+                },
+                body: formData,
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Failed to convert file.");
+                }
+                return response.blob();
+            })
+            .then(blob => {
+                document.getElementById("loadingText").style.display = "none";
+                const url = URL.createObjectURL(blob);
+                const downloadLink = document.getElementById("downloadLink");
+                downloadLink.href = url;
+                downloadLink.download = "converted.pdf";
+                downloadLink.style.display = "block";
+            })
+            .catch(error => {
+                document.getElementById("loadingText").style.display = "none";
+                alert("Error: " + error.message);
+                console.error("Error:", error);
+            });
+        }
+    </script>
+</body>
+</html>

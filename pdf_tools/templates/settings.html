@@ -1,0 +1,205 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kannanware Innovation - Settings</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            display: flex;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .dark-mode {
+            background-color: #1e1e1e;
+            color: #ffffff;
+        }
+        .sidebar {
+            width: 250px;
+            background-color: #007bff;
+            color: white;
+            padding: 20px;
+            height: 100vh;
+            position: fixed;
+            text-align: center;
+        }
+        .sidebar img {
+            width: 100px;
+            margin-bottom: 20px;
+        }
+        .sidebar h2 {
+            text-align: center;
+        }
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+        .sidebar ul li, .sidebar ul li a {
+            padding: 10px;
+            cursor: pointer;
+            color: white;
+            text-decoration: none;
+            display: block;
+        }
+        .sidebar ul li:hover, .sidebar ul li.active {
+            background-color: #0056b3;
+        }
+        .content {
+            margin-left: 270px;
+            padding: 20px;
+            flex: 1;
+        }
+        .settings-section {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            display: none;
+        }
+        .settings-section.active {
+            display: block;
+        }
+        .settings-section h3 {
+            margin-top: 0;
+        }
+        .developer-photo {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 15px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .about-links a {
+            display: block;
+            margin: 5px 0;
+            text-decoration: none;
+            color: #007bff;
+        }
+        .about-links a:hover {
+            text-decoration: underline;
+        }
+        .feedback-btn {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .feedback-btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <img src="{% static 'images/kannanware_logo_black_11zon.png' %}" alt="Kannanware Innovation Logo">
+        <h2>⚙️ Settings</h2>
+        <ul>
+            <li><a href="{% url 'home' %}">🏠 Home</a></li>
+            <li onclick="showSection('general')">⚙️ General Settings</li>
+            <li onclick="showSection('file-processing')">📂 File Processing</li>
+            <li onclick="showSection('security')">🔒 Security & Privacy</li>
+            <li onclick="showSection('preferences')">🎨 User Preferences</li>
+            <li onclick="showSection('account')">👤 Account & Authentication</li>
+            <li onclick="showSection('support')">❓ About & Support</li>
+        </ul>
+    </div>
+    <div class="content">
+        <div id="general" class="settings-section active">
+            <h3>General Settings</h3>
+            <label>Default Save Location:</label>
+            <select>
+                <option value="local">Local Storage</option>
+                <option value="server">Server Storage</option>
+            </select>
+        </div>
+        <div id="file-processing" class="settings-section">
+            <h3>File Processing Settings</h3>
+            <label>Compression Level:</label>
+            <select>
+                <option value="low">Low</option>
+                <option value="medium">Medium</option>
+                <option value="high">High</option>
+            </select>
+        </div>
+        <div id="security" class="settings-section">
+            <h3>Security & Privacy</h3>
+            <label>Password Protection:</label>
+            <input type="checkbox"> Enable password security
+        </div>
+        <div id="preferences" class="settings-section">
+            <h3>User Preferences</h3>
+            <label>Theme:</label>
+            <select id="theme-selection" onchange="changeTheme(this.value)">
+                <option value="light">Light Mode</option>
+                <option value="dark">Dark Mode</option>
+            </select>
+        </div>
+        <div id="account" class="settings-section">
+            <h3>Account & Authentication</h3>
+            <label>Two-Factor Authentication:</label>
+            <select>
+                <option value="none">None</option>
+                <option value="zoho">Zoho Authenticator</option>
+                <option value="msauth">Microsoft Authenticator</option>
+            </select>
+        </div>
+        <div id="support" class="settings-section">
+            <h3>About & Support</h3>
+            <img src="{% static 'images/developer photo.jpg' %}" alt="Developer Photo" class="developer-photo">
+            <h4>Developer Information</h4>
+            <p><strong>Name:</strong> Narayanan</p>
+            <p><strong>Role:</strong> Software Developer - Analytics & AI</p>
+            <p><strong>Company:</strong> Kannanware Innovation</p>
+
+            <h4>Online Profiles</h4>
+            <div class="about-links">
+                <a href="https://www.linkedin.com/in/narayanan-g-90848b201/">🌐 LinkedIn</a>
+                <a href="https://github.com/narayanan" target="_blank">🐙 GitHub</a>
+                <a href="https://www.kannanware.com" target="_blank">🔗 Company Official Website</a>
+            </div>
+
+            <h4>Contact Information</h4>
+            <p>📧 <strong>Email:</strong> <a href="mailto:Narayanan.ganabathi@kannanware.com">Narayanan.ganabathi@kannanware.com</a></p>
+            <p>📞 <strong>Phone:</strong> +91 6383584223</p>
+
+            <h4>Feedback & Support</h4>
+            <p>If you have any issues or suggestions, feel free to contact us.</p>
+
+            <button class="feedback-btn" onclick="window.location.href='feedback.html'">Submit Feedback</button>
+        </div>
+    </div>
+
+    <script>
+        function changeTheme(theme) {
+            document.body.classList.remove("light-mode", "dark-mode");
+            document.body.classList.add(theme + "-mode");
+            localStorage.setItem("theme", theme);
+        }
+
+        function showSection(sectionId) {
+            document.querySelectorAll('.settings-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById(sectionId).classList.add('active');
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            const savedTheme = localStorage.getItem("theme") || "light";
+            document.body.classList.add(savedTheme + "-mode");
+            document.getElementById("theme-selection").value = savedTheme;
+            showSection('general');
+        });
+    </script>
+</body>
+</html>

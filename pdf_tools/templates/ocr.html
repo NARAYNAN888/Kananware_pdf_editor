@@ -1,0 +1,209 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kannanware Innovation - OCR (Extract Text from Image PDF)</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #007bff;
+            padding: 10px 20px;
+            color: white;
+        }
+        .menu {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        .menu-item {
+            position: relative;
+        }
+        .menu-item a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 10px;
+        }
+        .submenu {
+            display: none;
+            position: absolute;
+            background-color: white;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            padding: 10px;
+            border-radius: 5px;
+            top: 100%;
+            left: 0;
+            white-space: nowrap;
+            flex-direction: column;
+            min-width: 150px;
+        }
+        .submenu a {
+            display: block;
+            color: black;
+            padding: 5px 10px;
+            text-decoration: none;
+        }
+        .submenu a:hover {
+            background-color: #ddd;
+        }
+        .menu-item:hover .submenu {
+            display: flex;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 80vh;
+            text-align: center;
+        }
+        .upload-section {
+            margin-top: 20px;
+        }
+        .upload-section input, 
+        .upload-section button {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+        .upload-section button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .upload-section button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        .upload-section button:hover {
+            background-color: #0056b3;
+        }
+        .text-section {
+            margin-top: 30px;
+            width: 60%;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            text-align: left;
+            display: none;
+        }
+        .text-section h2 {
+            color: #007bff;
+        }
+        .text-section textarea {
+            width: 100%;
+            height: 200px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="menu">
+            <img src="{% static 'images/kannanware_logo_black_11zon.png'%}" alt="Kannanware Innovation Logo" height="40">
+            <div class="menu-item">
+                <a href="{% url 'home' %}">Home</a>
+                <div class="submenu">
+                    <a href="{% url 'dashboard' %}">Dashboard</a>
+                    <a href="{% url 'settings' %}">Settings</a>
+                </div>
+            </div>
+            <div class="menu-item">
+                <a href="#">View</a>
+                <div class="submenu">
+                    <a href="{% url 'recent_files'%}">Recent Files</a>
+                    <a href="{% url 'shared_files'%}">Shared Files</a>
+                </div>
+            </div>
+            <div class="menu-item">
+                <a href="#">Edit</a>
+                <div class="submenu">
+                    <a href="{% url 'merge_pdf' %}">Merge PDF</a>
+                    <a href="{% url 'split'%}">Split PDF</a>
+                    <a href="{% url 'compress_pdf'%}">Compress PDF</a>
+                    <a href="{% url 'extract_text'%}">Extract Text</a>
+                    <a href="{% url 'rotate_pdf'%}">Rotate Pages</a>
+                    <a href="{% url 'remove_pages'%}">Remove Pages</a>
+                </div>
+            </div>
+            <div class="menu-item">
+                <a href="#">Help</a>
+                <div class="submenu">
+                    <a href="{% url 'faq'%}">FAQ</a>
+                    <a href="{% url 'support'%}">Support</a>
+                </div>
+            </div>
+            <div class="menu-item">
+                <a href="#">All PDF Editor</a>
+                <div class="submenu">
+                <a href="{% url 'watermark_removal'%}">Watermark Removal</a>
+                    <a href="{% url 'add_annotations'%}">Add Annotations</a>
+                    <a href="{% url 'rearrange_pages'%}">Rearrange Pages</a>
+                    <a href="{% url 'sign_pdf'%}">Sign PDF</a>
+                    <a href="{% url 'convert_pdf_to_word'%}">Convert PDF to Word</a>
+                    <a href="{% url 'convert_word_to_pdf'%}">Convert Word to PDF</a>
+                    <a href="{% url 'convert_pdf_to_excel'%}">Convert PDF to Excel</a>
+                    <a href="{% url 'convert_pdf_to_image'%}">Convert PDF to Image</a>
+                    <a href="{% url 'ocr'%}">OCR (Extract Text from Image PDF)</a>
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+    <div class="container">
+        <h1>OCR - Extract Text from Image PDF</h1>
+        <p>Select a scanned PDF to extract text using OCR.</p>
+        <div class="upload-section">
+            <input type="file" id="pdfUpload" accept="application/pdf">
+            <button id="extractButton" onclick="extractText()" disabled>Extract Text</button>
+        </div>
+        <div id="textSection" class="text-section">
+            <h2>Extracted Text</h2>
+            <textarea id="extractedText" readonly></textarea>
+        </div>
+    </div>
+    <script>
+        document.getElementById("pdfUpload").addEventListener("change", function () {
+            document.getElementById("extractButton").disabled = !this.files.length;
+        });
+
+        function extractText() {
+            const pdf = document.getElementById("pdfUpload").files[0];
+
+            if (!pdf) {
+                alert("Please select a PDF file.");
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append("pdf", pdf);
+
+            fetch("/extract-text", {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("extractedText").value = data.text;
+                document.getElementById("textSection").style.display = "block";
+            })
+            .catch(error => console.error("Error:", error));
+        }
+    </script>
+</body>
+</html>
